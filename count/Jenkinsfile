@@ -41,6 +41,21 @@ pipeline {
                 '''
             }
         }
+        stage('Destroy') {
+            steps {
+                input "shall I Apply?"
+            }
+        }
+        stage('Deleting') {
+            steps {
+                sh '''
+                pwd
+                ls -ltr
+                cd count
+                terraform destroy -auto-approve
+                '''
+            }
+        }
     }
     post { 
         always { 
