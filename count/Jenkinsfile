@@ -41,21 +41,6 @@ pipeline {
                 '''
             }
         }
-        stage('Approve') {
-            steps {
-                input "shall I Apply?"
-            }
-        }
-        stage('apply') {
-            steps {
-                sh '''
-                pwd
-                ls -ltr
-                cd count
-                terraform destroy -auto-approve
-                '''
-            }
-        }
     }
     post { 
         always { 
