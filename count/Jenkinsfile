@@ -1,0 +1,71 @@
+pipeline {
+    agent { node { label 'Agent-1' } }
+
+    options {
+     ansiColor('xterm')
+    }
+
+    stages {
+        stage('init') {
+            steps {
+                sh '''
+                cd count
+                ls -ltr
+                pwd
+                terraform init
+                '''
+            }
+        }
+        stage('Plan') {
+            steps {
+                sh '''
+                cd count
+                ls -ltr
+                pwd
+                terraform plan
+                '''
+            }
+        }
+        stage('Approve') {
+            steps {
+                input "shall I Apply?"
+            }
+        }
+        stage('apply') {
+            steps {
+                sh '''
+                pwd
+                ls -ltr
+                cd count
+                terraform apply -auto-approve
+                '''
+            }
+        }
+        stage('Approve') {
+            steps {
+                input "shall I Apply?"
+            }
+        }
+        stage('apply') {
+            steps {
+                sh '''
+                pwd
+                ls -ltr
+                cd count
+                terraform destroy -auto-approve
+                '''
+            }
+        }
+    }
+    post { 
+        always { 
+            echo 'I will always run whether job is success or not'
+        }
+        success {
+            echo 'I will run only when job is success'
+        }
+        failure { 
+             echo 'I will run when job is failed'
+        }
+    }
+}
